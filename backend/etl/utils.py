@@ -9,7 +9,7 @@ def get_db_connection():
         host="localhost",
         database="study_analytics",
         user="postgres",
-        password="YOUR_DB_PASSWORD"
+        password="jayesh@2005"
     )
 
 # -----------------------------
