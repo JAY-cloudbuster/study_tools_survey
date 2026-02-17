@@ -1,58 +1,84 @@
 import pandas as pd
 from utils import get_db_connection, generate_cohort_key
 
-# -----------------------------
-# Google Sheet CSV URL (Baseline)
-# -----------------------------
 BASELINE_SHEET_URL = (
-    "https://docs.google.com/spreadsheets/d/" # here the address of the docs is not correct
+    "https://docs.google.com/spreadsheets/d/"
     "19cPgZ0sf23MCRknkdxliMp-HBa1BS1_ffWjcqmmNPJA"
-    "/export?format=csv" # no data in the given link so no csv format availabke
+    "/export?format=csv"
 )
+
+def normalize(text):
+    return (
+        str(text).lower()
+        .replace("–", "-")
+        .replace("—", "-")
+        .replace(" ", "")
+    )
+
+def is_valid_attention(text):
+    return normalize(text).startswith("2-4")
 
 def run_baseline_etl():
     df = pd.read_csv(BASELINE_SHEET_URL)
 
+    # 🔑 Normalize headers ONCE
+    df.columns = df.columns.str.strip()
+
+    # 🔍 Detect attention column
+    attention_col = next(
+        col for col in df.columns if "attention check" in col.lower()
+    )
+
     conn = get_db_connection()
     cur = conn.cursor()
 
+    accepted, rejected = 0, 0
+
     for _, row in df.iterrows():
-        cohort_key = generate_cohort_key(row) #here there is error that is howering
 
-        query = """
-        INSERT INTO baseline_cohorts (
-            cohort_key,
-            response_timestamp,
-            state,
-            university_type,
-            course_program,
-            year_of_study,
-            cgpa_band,
-            baseline_avg_daily_study_hours,
-            digital_tools_raw,
-            tool_count
-        )
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        ON CONFLICT (cohort_key) DO NOTHING;
-        """
+        if not is_valid_attention(row.get(attention_col, "")):
+            rejected += 1
+            continue
 
-        cur.execute(query, (
+        cohort_key = generate_cohort_key(row)
+
+        cur.execute("""
+            INSERT INTO baseline_cohorts (
+                cohort_key,
+                response_timestamp,
+                state,
+                university_type,
+                course_program,
+                year_of_study,
+                cgpa_band,
+                baseline_avg_daily_study_hours,
+                digital_tools_raw,
+                tool_count
+            )
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            ON CONFLICT (cohort_key) DO NOTHING;
+        """, (
             cohort_key,
             row["Timestamp"],
-            row["State"],
-            row["Type of university"],
+            row["Which state are you currently studying in?"],
+            row["Type of university / institution"],
             row["Course / Program"],
             row["Current year of study"],
-            row["Current CGPA band"],
-            row["Hours usually studied per day before study"],
-            row["Which digital tools do you regularly use?"],
-            row["Count of tools selected"]
-        )) ## feature thaat are targeted to be extracted
+            row["Your current CGPA band (at the start of this study)"],
+            row["On average, how many hours did you usually study per day before this study?"],
+            row["Which digital tools do you regularly use? (Select all that apply)"],
+            row["Validation Follow-up  \nHow many options did you select in the previous question?"]
+        ))
+
+        accepted += 1
 
     conn.commit()
     cur.close()
     conn.close()
-    print("Baseline ETL completed successfully.")
+
+    print("Baseline ETL completed.")
+    print(f"Accepted rows: {accepted}")
+    print(f"Rejected rows: {rejected}")
 
 if __name__ == "__main__":
     run_baseline_etl()
