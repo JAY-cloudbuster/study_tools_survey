@@ -10,15 +10,13 @@ WEEKLY_SHEET_URL = (
 def run_weekly_etl():
     df = pd.read_csv(WEEKLY_SHEET_URL)
 
-    # 🔍 Dynamically detect attention column
-    attention_col = None
-    for col in df.columns:
-        if "answering carefully" in col.lower():
-            attention_col = col
-            break
+    # Normalize column names
+    df.columns = df.columns.str.strip()
 
-    if attention_col is None:
-        raise RuntimeError("Weekly attention check column not found")
+    # Detect attention check column
+    attention_col = next(
+        col for col in df.columns if "answering carefully" in col.lower()
+    )
 
     conn = get_db_connection()
     cur = conn.cursor()
@@ -36,7 +34,6 @@ def run_weekly_etl():
         cur.execute("""
             INSERT INTO weekly_observations (
                 cohort_key,
-                response_timestamp,
                 week_number,
                 total_hours_this_week,
                 avg_daily_study_hours,
@@ -54,10 +51,9 @@ def run_weekly_etl():
                 comparison_to_last_week,
                 weekly_tools_raw
             )
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
         """, (
             cohort_key,
-            row["Timestamp"],
             row["Week Number"],
             row["Total number of hours you studied in the past 7 days"],
             row["Average daily study hours during weekdays this week"],

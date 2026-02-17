@@ -21,10 +21,10 @@ def is_valid_attention(text):
 def run_baseline_etl():
     df = pd.read_csv(BASELINE_SHEET_URL)
 
-    # 🔑 Normalize headers ONCE
+    # Normalize column names
     df.columns = df.columns.str.strip()
 
-    # 🔍 Detect attention column
+    # Detect attention check column
     attention_col = next(
         col for col in df.columns if "attention check" in col.lower()
     )
@@ -45,7 +45,6 @@ def run_baseline_etl():
         cur.execute("""
             INSERT INTO baseline_cohorts (
                 cohort_key,
-                response_timestamp,
                 state,
                 university_type,
                 course_program,
@@ -55,11 +54,10 @@ def run_baseline_etl():
                 digital_tools_raw,
                 tool_count
             )
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
             ON CONFLICT (cohort_key) DO NOTHING;
         """, (
             cohort_key,
-            row["Timestamp"],
             row["Which state are you currently studying in?"],
             row["Type of university / institution"],
             row["Course / Program"],
