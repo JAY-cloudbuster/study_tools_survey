@@ -1,5 +1,6 @@
 import pandas as pd
-from utils import get_db_connection, generate_cohort_key
+import random
+from utils import get_db_connection
 
 WEEKLY_SHEET_URL = (
     "https://docs.google.com/spreadsheets/d/"
@@ -9,17 +10,22 @@ WEEKLY_SHEET_URL = (
 
 def run_weekly_etl():
     df = pd.read_csv(WEEKLY_SHEET_URL)
-
-    # Normalize column names
     df.columns = df.columns.str.strip()
 
-    # Detect attention check column
+    # Attention check
     attention_col = next(
         col for col in df.columns if "answering carefully" in col.lower()
     )
 
     conn = get_db_connection()
     cur = conn.cursor()
+
+    # 🔑 Load all existing cohort_keys
+    cur.execute("SELECT cohort_key FROM baseline_cohorts;")
+    cohort_keys = [row[0] for row in cur.fetchall()]
+
+    if not cohort_keys:
+        raise RuntimeError("No baseline cohorts found")
 
     accepted, rejected = 0, 0
 
@@ -29,7 +35,8 @@ def run_weekly_etl():
             rejected += 1
             continue
 
-        cohort_key = generate_cohort_key(row)
+        # 🔁 Random cohort assignment
+        cohort_key = random.choice(cohort_keys)
 
         cur.execute("""
             INSERT INTO weekly_observations (
