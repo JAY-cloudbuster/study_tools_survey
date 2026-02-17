@@ -5,9 +5,9 @@ from utils import get_db_connection, generate_cohort_key
 # Google Sheet CSV URL (Baseline)
 # -----------------------------
 BASELINE_SHEET_URL = (
-    "https://docs.google.com/spreadsheets/d/"
+    "https://docs.google.com/spreadsheets/d/" # here the address of the docs is not correct
     "19cPgZ0sf23MCRknkdxliMp-HBa1BS1_ffWjcqmmNPJA"
-    "/export?format=csv"
+    "/export?format=csv" # no data in the given link so no csv format availabke
 )
 
 def run_baseline_etl():
@@ -17,7 +17,7 @@ def run_baseline_etl():
     cur = conn.cursor()
 
     for _, row in df.iterrows():
-        cohort_key = generate_cohort_key(row)
+        cohort_key = generate_cohort_key(row) #here there is error that is howering
 
         query = """
         INSERT INTO baseline_cohorts (
@@ -47,7 +47,7 @@ def run_baseline_etl():
             row["Hours usually studied per day before study"],
             row["Which digital tools do you regularly use?"],
             row["Count of tools selected"]
-        ))
+        )) ## feature thaat are targeted to be extracted
 
     conn.commit()
     cur.close()
