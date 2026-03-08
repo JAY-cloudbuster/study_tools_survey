@@ -9,10 +9,13 @@ WEEKLY_SHEET_URL = (
 )
 
 def run_weekly_etl():
+
     df = pd.read_csv(WEEKLY_SHEET_URL)
     df.columns = df.columns.str.strip()
 
-    # Attention check
+    # Convert timestamp
+    df["Timestamp"] = pd.to_datetime(df["Timestamp"], errors="coerce")
+
     attention_col = next(
         col for col in df.columns if "answering carefully" in col.lower()
     )
@@ -20,14 +23,14 @@ def run_weekly_etl():
     conn = get_db_connection()
     cur = conn.cursor()
 
-    # 🔑 Load all existing cohort_keys
     cur.execute("SELECT cohort_key FROM baseline_cohorts;")
     cohort_keys = [row[0] for row in cur.fetchall()]
 
     if not cohort_keys:
-        raise RuntimeError("No baseline cohorts found")
+        raise RuntimeError("No baseline cohorts found.")
 
-    accepted, rejected = 0, 0
+    accepted = 0
+    rejected = 0
 
     for _, row in df.iterrows():
 
@@ -35,48 +38,49 @@ def run_weekly_etl():
             rejected += 1
             continue
 
-        # 🔁 Random cohort assignment
         cohort_key = random.choice(cohort_keys)
 
         cur.execute("""
-            INSERT INTO weekly_observations (
-                cohort_key,
-                week_number,
-                total_hours_this_week,
-                avg_daily_study_hours,
-                study_consistency,
-                revision_frequency,
-                group_study_participation,
-                ai_tools_usage,
-                approx_ai_usage_hours,
-                digital_tool_usage_frequency,
-                academic_constraints_raw,
-                productivity_level,
-                stress_level,
-                had_assessment,
-                assessment_score,
-                comparison_to_last_week,
-                weekly_tools_raw
-            )
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
+        INSERT INTO weekly_observations (
+            cohort_key,
+            response_timestamp,
+            week_number,
+            total_hours_this_week,
+            avg_daily_study_hours,
+            study_consistency,
+            revision_frequency,
+            group_study_participation,
+            ai_tools_usage,
+            approx_ai_usage_hours,
+            digital_tool_usage_frequency,
+            academic_constraints_raw,
+            productivity_level,
+            stress_level,
+            had_assessment,
+            assessment_score,
+            comparison_to_last_week,
+            weekly_tools_raw
+        )
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);
         """, (
             cohort_key,
-            row["Week Number"],
-            row["Total number of hours you studied in the past 7 days"],
-            row["Average daily study hours during weekdays this week"],
-            row["How consistent was your study routine THIS WEEK?"],
-            row["How often did you revise material within 24 hours THIS WEEK?"],
-            row["Group study participation THIS WEEK"],
-            row["AI Tools Usage"],
-            row["Approximate hours spent using AI tools THIS WEEK"],
-            row["Overall frequency of digital tool usage THIS WEEK"],
-            row["Did you face any constraints THIS WEEK? (Select all that apply)"],
-            row["Your productivity level THIS WEEK"],
-            row["Your academic stress level THIS WEEK"],
-            row["Did you have any academic assessment THIS WEEK?"] == "Yes",
-            row.get("If yes, approximate score (%)", None),
-            row["Compared to LAST WEEK, your overall study effectiveness is:"],
-            row["Which of the following learning tools did you use THIS WEEK? (Select all that apply)"]
+            row["Timestamp"],
+            row.get("Week Number"),
+            row.get("Total number of hours you studied in the past 7 days"),
+            row.get("Average daily study hours during weekdays this week"),
+            row.get("How consistent was your study routine THIS WEEK?"),
+            row.get("How often did you revise material within 24 hours THIS WEEK?"),
+            row.get("Group study participation THIS WEEK"),
+            row.get("AI Tools Usage"),
+            row.get("Approximate hours spent using AI tools THIS WEEK"),
+            row.get("Overall frequency of digital tool usage THIS WEEK"),
+            row.get("Did you face any constraints THIS WEEK? (Select all that apply)"),
+            row.get("Your productivity level THIS WEEK"),
+            row.get("Your academic stress level THIS WEEK"),
+            str(row.get("Did you have any academic assessment THIS WEEK?")).lower() == "yes",
+            row.get("If yes, approximate score (%)"),
+            row.get("Compared to LAST WEEK, your overall study effectiveness is:"),
+            row.get("Which of the following learning tools did you use THIS WEEK? (Select all that apply)")
         ))
 
         accepted += 1
@@ -88,6 +92,7 @@ def run_weekly_etl():
     print("Weekly ETL completed.")
     print(f"Accepted rows: {accepted}")
     print(f"Rejected rows: {rejected}")
+
 
 if __name__ == "__main__":
     run_weekly_etl()
