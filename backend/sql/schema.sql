@@ -1,10 +1,8 @@
 -- =====================================================
--- BASELINE COHORTS TABLE
--- Stores one-time academic baseline data
+-- LAYER 1 — BASELINE COHORTS (SURVEY)
 -- =====================================================
 CREATE TABLE IF NOT EXISTS baseline_cohorts (
     cohort_key VARCHAR(128) PRIMARY KEY,
-
     response_timestamp TIMESTAMP,
 
     state VARCHAR(100),
@@ -20,8 +18,7 @@ CREATE TABLE IF NOT EXISTS baseline_cohorts (
 );
 
 -- =====================================================
--- WEEKLY OBSERVATIONS TABLE (TIME-SERIES FACT TABLE)
--- Stores weekly study behavior data
+-- LAYER 1 — WEEKLY OBSERVATIONS
 -- =====================================================
 CREATE TABLE IF NOT EXISTS weekly_observations (
     observation_id SERIAL PRIMARY KEY,
@@ -56,8 +53,50 @@ CREATE TABLE IF NOT EXISTS weekly_observations (
 );
 
 -- =====================================================
--- DERIVED METRICS TABLE
--- Stores analytics-ready computed indicators
+-- LAYER 2 — STUDENT PERFORMANCE DATASET (UCI)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS student_performance (
+    student_id SERIAL PRIMARY KEY,
+
+    school VARCHAR(20),
+    sex VARCHAR(10),
+    age INT,
+    address VARCHAR(10),
+
+    famsize VARCHAR(10),
+    Pstatus VARCHAR(10),
+
+    Medu INT,
+    Fedu INT,
+
+    studytime INT,
+    failures INT,
+    absences INT,
+
+    internet VARCHAR(10),
+    activities VARCHAR(10),
+
+    final_grade INT
+);
+
+-- =====================================================
+-- LAYER 3 — STUDENT STRESS DATASET
+-- =====================================================
+CREATE TABLE IF NOT EXISTS student_stress_context (
+    record_id SERIAL PRIMARY KEY,
+
+    study_hours FLOAT,
+    sleep_hours FLOAT,
+
+    academic_pressure INT,
+    stress_level INT,
+
+    emotional_wellbeing INT,
+    social_support INT
+);
+
+-- =====================================================
+-- ANALYTICS TABLE
 -- =====================================================
 CREATE TABLE IF NOT EXISTS cohort_weekly_metrics (
     cohort_key VARCHAR(128),
