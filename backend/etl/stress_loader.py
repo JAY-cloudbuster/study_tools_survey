@@ -1,26 +1,14 @@
 import pandas as pd
 from utils import get_db_connection
 
-MAT_PATH = "../../data/layer2_student_performance/student-mat.csv"
-POR_PATH = "../../data/layer2_student_performance/student-por.csv"
+DATA_PATH = "../../data/layer3_stress_dataset/stress_students.csv"
 
 
-def run_student_performance_loader():
+def run_stress_loader():
 
-    mat = pd.read_csv(MAT_PATH, sep=";")
-    por = pd.read_csv(POR_PATH, sep=";")
+    df = pd.read_csv(DATA_PATH)
 
-    df = pd.concat([mat, por], ignore_index=True)
-
-    df = df[[
-        "school","sex","age","address",
-        "famsize","Pstatus",
-        "Medu","Fedu",
-        "studytime","failures","absences",
-        "internet","activities","G3"
-    ]]
-
-    df.rename(columns={"G3": "final_grade"}, inplace=True)
+    df.columns = df.columns.str.strip()
 
     conn = get_db_connection()
     cur = conn.cursor()
@@ -28,23 +16,30 @@ def run_student_performance_loader():
     for _, row in df.iterrows():
 
         cur.execute("""
-        INSERT INTO student_performance(
-            school,sex,age,address,
-            famsize,Pstatus,
-            Medu,Fedu,
-            studytime,failures,absences,
-            internet,activities,
-            final_grade
+        INSERT INTO student_stress_context(
+            study_hours,
+            sleep_hours,
+            academic_pressure,
+            stress_level,
+            emotional_wellbeing,
+            social_support
         )
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        """, tuple(row))
+        VALUES (%s,%s,%s,%s,%s,%s)
+        """, (
+            row.get("study_hours"),
+            row.get("sleep_hours"),
+            row.get("academic_pressure"),
+            row.get("stress_level"),
+            row.get("emotional_wellbeing"),
+            row.get("social_support")
+        ))
 
     conn.commit()
     cur.close()
     conn.close()
 
-    print("Layer-2 dataset loaded successfully.")
+    print("Layer-3 dataset loaded successfully.")
 
 
 if __name__ == "__main__":
-    run_student_performance_loader()
+    run_stress_loader()
