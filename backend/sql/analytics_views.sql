@@ -31,17 +31,16 @@ SELECT
     stress_level,
 
     CASE
-        WHEN stress_level >= 8 AND total_hours_this_week < 10
+        WHEN stress_level >= 4 AND total_hours_this_week < 15
         THEN 'HIGH_RISK'
 
-        WHEN stress_level >= 6
+        WHEN stress_level >= 3
         THEN 'MEDIUM_RISK'
 
         ELSE 'LOW_RISK'
     END AS risk_category
 
 FROM weekly_observations;
-
 
 -- =====================================================
 -- TOOL ADOPTION ANALYSIS
