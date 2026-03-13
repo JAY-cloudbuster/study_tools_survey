@@ -1,3 +1,4 @@
+import os
 import subprocess
 import time
 import sys
@@ -23,13 +24,18 @@ class PipelineOrchestrator:
 
             try:
 
-                # If step is a Python script
                 if command[0].endswith(".py"):
-                    subprocess.run([sys.executable] + command, check=True)
-
-                # Otherwise run system command directly
+                    subprocess.run(
+                        [sys.executable] + command,
+                        check=True,
+                        env=os.environ
+                    )
                 else:
-                    subprocess.run(command, check=True)
+                    subprocess.run(
+                        command,
+                        check=True,
+                        env=os.environ
+                    )
 
                 duration = time.time() - start
                 logger.info(f"{name} completed in {duration:.2f}s")

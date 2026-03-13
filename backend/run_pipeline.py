@@ -105,7 +105,6 @@ def main():
                 "sql/refresh_views.sql"
             ]
         )
-
         pipeline.run()
 
         log_pipeline_end(run_id, "SUCCESS")
