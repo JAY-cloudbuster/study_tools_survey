@@ -3,13 +3,7 @@ import pandas as pd
 import psycopg2
 from dotenv import load_dotenv
 
-
 load_dotenv()
-
-
-# ---------------------------------------------------
-# Resolve project root dynamically
-# ---------------------------------------------------
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
@@ -18,10 +12,6 @@ DATA_DIR = os.path.join(BASE_DIR, "data", "layer2_student_performance")
 MAT_PATH = os.path.join(DATA_DIR, "student-mat.csv")
 POR_PATH = os.path.join(DATA_DIR, "student-por.csv")
 
-
-# ---------------------------------------------------
-# Database connection
-# ---------------------------------------------------
 
 def get_connection():
 
@@ -34,15 +24,10 @@ def get_connection():
     )
 
 
-# ---------------------------------------------------
-# Loader Function
-# ---------------------------------------------------
-
 def run_student_performance_loader():
 
     print("Loading student performance datasets...")
 
-    # Load datasets
     mat = pd.read_csv(MAT_PATH, sep=";")
     por = pd.read_csv(POR_PATH, sep=";")
 
@@ -53,61 +38,52 @@ def run_student_performance_loader():
 
     print(f"Total records loaded from CSV: {len(df)}")
 
+    # Keep only analytics columns
+    df = df[
+        [
+            "studytime",
+            "failures",
+            "absences",
+            "G1",
+            "G2",
+            "G3",
+            "course",
+        ]
+    ]
+
     conn = get_connection()
     cur = conn.cursor()
 
     insert_query = """
     INSERT INTO student_performance (
-        school,
-        sex,
-        age,
-        address,
-        famsize,
-        Pstatus,
-        Medu,
-        Fedu,
-        Mjob,
-        Fjob,
-        reason,
-        guardian,
-        traveltime,
         studytime,
         failures,
-        schoolsup,
-        famsup,
-        paid,
-        activities,
-        nursery,
-        higher,
-        internet,
-        romantic,
-        famrel,
-        freetime,
-        goout,
-        Dalc,
-        Walc,
-        health,
         absences,
-        G1,
-        G2,
-        G3,
+        g1,
+        g2,
+        g3,
         course
     )
-    VALUES (
-        %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
-        %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
-        %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,
-        %s,%s,%s,%s
-    )
+    VALUES (%s,%s,%s,%s,%s,%s,%s)
     """
 
     rows_inserted = 0
 
     for _, row in df.iterrows():
 
-        values = tuple(row[col] for col in df.columns)
+        cur.execute(
+            insert_query,
+            (
+                int(row["studytime"]),
+                int(row["failures"]),
+                int(row["absences"]),
+                int(row["G1"]),
+                int(row["G2"]),
+                int(row["G3"]),
+                row["course"],
+            ),
+        )
 
-        cur.execute(insert_query, values)
         rows_inserted += 1
 
     conn.commit()
@@ -117,8 +93,6 @@ def run_student_performance_loader():
 
     print(f"Inserted {rows_inserted} rows into student_performance table.")
 
-
-# ---------------------------------------------------
 
 if __name__ == "__main__":
     run_student_performance_loader()
