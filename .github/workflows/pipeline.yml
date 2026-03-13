@@ -13,26 +13,57 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: study_analytics
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
 
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r backend/requirements.txt
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
 
-    - name: Validate Python Environment
-      run: python --version
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Waiting for postgres..."
+            sleep 2
+          done
 
-    - name: Run ETL Scripts
-      working-directory: backend
-      run: |
-        python etl/baseline_etl.py
-        python etl/weekly_etl.py
+      - name: Setup Database Schema
+        run: |
+          PGPASSWORD=postgres psql -h localhost -U postgres -d study_analytics -f backend/sql/schema.sql
+
+      - name: Run ETL Scripts
+        working-directory: backend
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: study_analytics
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+        run: |
+          python etl/baseline_etl.py
+          python etl/weekly_etl.py
