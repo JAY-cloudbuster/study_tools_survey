@@ -3,7 +3,9 @@
 -- Computes engagement index from productivity & stress
 -- =====================================================
 
-CREATE OR REPLACE VIEW engagement_metrics AS
+DROP MATERIALIZED VIEW IF EXISTS engagement_metrics;
+
+CREATE MATERIALIZED VIEW engagement_metrics AS
 SELECT
     cohort_key,
     week_number,
@@ -17,12 +19,15 @@ SELECT
 FROM weekly_observations;
 
 
+
 -- =====================================================
 -- ACADEMIC RISK ANALYSIS VIEW
 -- Flags students at academic risk
 -- =====================================================
 
-CREATE OR REPLACE VIEW academic_risk_analysis AS
+DROP MATERIALIZED VIEW IF EXISTS academic_risk_analysis;
+
+CREATE MATERIALIZED VIEW academic_risk_analysis AS
 SELECT
     cohort_key,
     week_number,
@@ -42,12 +47,16 @@ SELECT
 
 FROM weekly_observations;
 
+
+
 -- =====================================================
 -- TOOL ADOPTION ANALYSIS
 -- Segments students by tool usage
 -- =====================================================
 
-CREATE OR REPLACE VIEW tool_adoption_analysis AS
+DROP MATERIALIZED VIEW IF EXISTS tool_adoption_analysis;
+
+CREATE MATERIALIZED VIEW tool_adoption_analysis AS
 SELECT
     state,
     university_type,
@@ -60,12 +69,15 @@ FROM baseline_cohorts
 GROUP BY state, university_type, course_program;
 
 
+
 -- =====================================================
 -- STRESS BEHAVIOR ANALYSIS
 -- Behavioral indicators from stress dataset
 -- =====================================================
 
-CREATE OR REPLACE VIEW stress_behavior_analysis AS
+DROP MATERIALIZED VIEW IF EXISTS stress_behavior_analysis;
+
+CREATE MATERIALIZED VIEW stress_behavior_analysis AS
 SELECT
     study_hours,
     sleep_hours,

@@ -3,13 +3,8 @@ import pandas as pd
 import psycopg2
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
-
-# ---------------------------------------------------
-# Resolve project root dynamically
-# ---------------------------------------------------
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
@@ -21,10 +16,6 @@ DATA_PATH = os.path.join(
 )
 
 
-# ---------------------------------------------------
-# Database connection
-# ---------------------------------------------------
-
 def get_connection():
 
     return psycopg2.connect(
@@ -35,10 +26,6 @@ def get_connection():
         password=os.getenv("DB_PASSWORD"),
     )
 
-
-# ---------------------------------------------------
-# Loader
-# ---------------------------------------------------
 
 def run_stress_loader():
 
@@ -65,14 +52,19 @@ def run_stress_loader():
 
     for _, row in df.iterrows():
 
-        study_hours = row["stress_experience"]
-        sleep_hours = row["sleep_problems"]
-        academic_pressure = row["anxiety_tension"]
-        stress_level = row["restlessness"]
+        study_hours = int(row["stress_experience"])
+        sleep_hours = int(row["sleep_problems"])
+        academic_pressure = int(row["anxiety_tension"])
+        stress_level = int(row["restlessness"])
 
         cur.execute(
             insert_query,
-            (study_hours, sleep_hours, academic_pressure, stress_level)
+            (
+                study_hours,
+                sleep_hours,
+                academic_pressure,
+                stress_level
+            )
         )
 
         rows_inserted += 1
@@ -84,8 +76,6 @@ def run_stress_loader():
 
     print(f"Inserted {rows_inserted} rows into student_stress_context table.")
 
-
-# ---------------------------------------------------
 
 if __name__ == "__main__":
     run_stress_loader()

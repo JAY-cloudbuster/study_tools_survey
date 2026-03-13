@@ -1,0 +1,4 @@
+REFRESH MATERIALIZED VIEW engagement_metrics;
+REFRESH MATERIALIZED VIEW academic_risk_analysis;
+REFRESH MATERIALIZED VIEW tool_adoption_analysis;
+REFRESH MATERIALIZED VIEW stress_behavior_analysis;
