@@ -1,5 +1,6 @@
 import subprocess
 import time
+import sys
 from pipeline.pipeline_logger import logger
 
 
@@ -22,7 +23,7 @@ class PipelineOrchestrator:
 
             try:
 
-                subprocess.run(command, check=True)
+                subprocess.run([sys.executable] + command, check=True)
 
                 duration = time.time() - start
                 logger.info(f"{name} completed in {duration:.2f}s")

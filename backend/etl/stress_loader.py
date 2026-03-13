@@ -1,8 +1,44 @@
+import os
 import pandas as pd
-from utils import get_db_connection
+import psycopg2
+from dotenv import load_dotenv
 
-DATA_PATH = "../../data/layer3_stress_dataset/stress_students.csv"
 
+load_dotenv()
+
+
+# ---------------------------------------------------
+# Resolve project root dynamically
+# ---------------------------------------------------
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+DATA_PATH = os.path.join(
+    BASE_DIR,
+    "data",
+    "layer3_stress_dataset",
+    "stress_students.csv"
+)
+
+
+# ---------------------------------------------------
+# Database connection
+# ---------------------------------------------------
+
+def get_connection():
+
+    return psycopg2.connect(
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        database=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+    )
+
+
+# ---------------------------------------------------
+# Loader
+# ---------------------------------------------------
 
 def run_stress_loader():
 
@@ -10,70 +46,46 @@ def run_stress_loader():
 
     df = pd.read_csv(DATA_PATH)
 
-    # Clean column names
-    df.columns = df.columns.str.strip().str.lower()
+    print(f"Rows read from CSV: {len(df)}")
 
-    print("CSV rows detected:", len(df))
-
-    # Map dataset columns → warehouse schema
-    df["study_hours"] = df["stress_experience"]
-    df["sleep_hours"] = df["sleep_problems"]
-    df["academic_pressure"] = df["anxiety_tension"]
-    df["stress_level"] = df["restlessness"]
-    df["emotional_wellbeing"] = 5 - df["anxiety_tension"]
-    df["social_support"] = 5 - df["restlessness"]
-
-    # Select only needed columns
-    df = df[
-        [
-            "study_hours",
-            "sleep_hours",
-            "academic_pressure",
-            "stress_level",
-            "emotional_wellbeing",
-            "social_support",
-        ]
-    ]
-
-    conn = get_db_connection()
+    conn = get_connection()
     cur = conn.cursor()
 
-    inserted = 0
+    insert_query = """
+    INSERT INTO student_stress_context (
+        study_hours,
+        sleep_hours,
+        academic_pressure,
+        stress_level
+    )
+    VALUES (%s,%s,%s,%s)
+    """
+
+    rows_inserted = 0
 
     for _, row in df.iterrows():
 
+        study_hours = row["stress_experience"]
+        sleep_hours = row["sleep_problems"]
+        academic_pressure = row["anxiety_tension"]
+        stress_level = row["restlessness"]
+
         cur.execute(
-            """
-        INSERT INTO student_stress_context(
-            study_hours,
-            sleep_hours,
-            academic_pressure,
-            stress_level,
-            emotional_wellbeing,
-            social_support
-        )
-        VALUES (%s,%s,%s,%s,%s,%s)
-        """,
-            (
-                int(row["study_hours"]),
-                int(row["sleep_hours"]),
-                int(row["academic_pressure"]),
-                int(row["stress_level"]),
-                int(row["emotional_wellbeing"]),
-                int(row["social_support"]),
-            ),
+            insert_query,
+            (study_hours, sleep_hours, academic_pressure, stress_level)
         )
 
-        inserted += 1
+        rows_inserted += 1
 
     conn.commit()
 
     cur.close()
     conn.close()
 
-    print("Rows inserted:", inserted)
-    print("Layer-3 dataset loaded successfully.")
+    print(f"Inserted {rows_inserted} rows into student_stress_context table.")
 
+
+# ---------------------------------------------------
 
 if __name__ == "__main__":
     run_stress_loader()
