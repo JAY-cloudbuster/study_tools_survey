@@ -241,3 +241,43 @@ The schema allows:
 The ETL pipeline is implemented in **Python** and consists of several modular scripts.
 
 ### Baseline ETL
+Processes baseline survey responses and loads them into:
+### Weekly ETL
+Processes weekly behavioral survey responses and loads them into:
+
+---
+
+### Student Performance Dataset Loader
+
+Loads external academic performance dataset.
+
+---
+
+### Student Stress Dataset Loader
+
+Loads psychological and lifestyle dataset.
+
+---
+
+# ⚙ Pipeline Orchestration
+
+To simplify execution, the entire ETL workflow can be executed using a single command.
+
+The orchestrator performs:
+
+1️⃣ Baseline ETL  
+2️⃣ Weekly ETL  
+3️⃣ Student performance dataset load  
+4️⃣ Stress dataset load  
+5️⃣ SQL analytics refresh  
+
+---
+
+# 📊 Analytical SQL Layer
+
+The analytics layer generates behavioral insights through SQL views.
+
+### Engagement Index
+engagement_index =
+productivity_level * 0.7 +
+(10 - stress_level) * 0.3
