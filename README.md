@@ -372,3 +372,18 @@ This ensures the pipeline remains stable during development.
 ---
 
 # 🧪 Example Pipeline Output
+Baseline ETL completed.
+Accepted rows: 89
+Rejected rows: 13
+
+Weekly ETL completed.
+Accepted rows: 241
+Rejected rows: 19
+
+Loading student performance datasets...
+Inserted 1044 rows.
+
+Loading stress dataset...
+Inserted 2000 rows.
+
+REFRESH MATERIALIZED VIEW
