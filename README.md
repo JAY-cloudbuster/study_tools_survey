@@ -218,3 +218,12 @@ The PostgreSQL warehouse contains multiple relational tables designed for behavi
 ---
 
 ### Example Schema
+baseline_cohorts
+│
+└── cohort_key
+│
+▼
+weekly_observations
+
+student_performance
+student_stress_context
