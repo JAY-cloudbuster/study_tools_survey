@@ -227,3 +227,17 @@ weekly_observations
 
 student_performance
 student_stress_context
+
+The schema allows:
+
+- cohort-level analysis
+- weekly behavioral tracking
+- multi-dataset correlation
+
+---
+
+# 🔄 ETL Pipeline
+
+The ETL pipeline is implemented in **Python** and consists of several modular scripts.
+
+### Baseline ETL
