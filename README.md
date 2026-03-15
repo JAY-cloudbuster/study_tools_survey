@@ -198,3 +198,23 @@ study_tools_survey
 │ pipeline.yml
 │
 └── README.md
+
+---
+
+# 🗄 Data Warehouse Design
+
+The PostgreSQL warehouse contains multiple relational tables designed for behavioral analytics.
+
+### Main Tables
+
+| Table | Description |
+|------|------|
+| baseline_cohorts | Student baseline academic context |
+| weekly_observations | Weekly behavioral survey responses |
+| student_performance | External academic performance dataset |
+| student_stress_context | Student lifestyle and stress dataset |
+| cohort_weekly_metrics | Derived analytics table |
+
+---
+
+### Example Schema
