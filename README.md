@@ -293,3 +293,82 @@ THEN 'MEDIUM_RISK'
 
 ELSE 'LOW_RISK'
 END
+
+---
+
+### Analytics Views
+
+| View | Purpose |
+|------|------|
+| engagement_metrics | Student engagement score |
+| academic_risk_analysis | Risk classification |
+| tool_adoption_analysis | Digital tool usage patterns |
+| stress_behavior_analysis | Stress behavior relationships |
+
+---
+
+# 📊 Tableau Dashboard
+
+The final analytics results are visualized using **Tableau**.
+
+The dashboard includes:
+
+### KPI Cards
+
+- Total Students
+- Average Study Hours
+- Average Productivity
+- Average Stress
+
+---
+
+### Visualizations
+
+- Study Hours vs Productivity
+- Stress vs Productivity
+- Academic Risk Distribution
+- Digital Tool Adoption by Program
+- Weekly Engagement Trends
+
+---
+
+### Interactive Filters
+
+Users can filter results by:
+
+- Course program
+- University type
+- State
+- Risk category
+
+---
+
+# ⚡ Automation
+
+The project supports automated execution of the ETL pipeline.
+
+Automation features include:
+
+- Pipeline orchestration script
+- Automated SQL view refresh
+- Scheduled pipeline execution
+- Logging support
+
+---
+
+# 🔁 CI/CD Pipeline
+
+The repository includes a **GitHub Actions workflow** that validates the pipeline.
+
+The CI pipeline performs:
+
+1️⃣ Install dependencies  
+2️⃣ Run ETL scripts  
+3️⃣ Validate database connections  
+4️⃣ Execute analytics SQL  
+
+This ensures the pipeline remains stable during development.
+
+---
+
+# 🧪 Example Pipeline Output
