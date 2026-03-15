@@ -42,3 +42,159 @@ PostgreSQL Data Warehouse
 SQL Analytical Views
 ↓
 Tableau Dashboard
+
+The architecture follows a **modern analytics pipeline structure**, similar to those used in real-world data teams.
+
+---
+
+# 🧠 Core Design Principles
+
+### 1️⃣ Behavioral Analytics
+
+The platform focuses on **student behavior rather than only final grades**, allowing deeper understanding of:
+
+- learning habits
+- productivity fluctuations
+- stress impact
+- digital tool usage
+
+---
+
+### 2️⃣ Multi-Dataset Integration
+
+The platform integrates multiple datasets:
+
+| Dataset | Purpose |
+|------|------|
+| Student Study Survey | Weekly study behavior |
+| Student Performance Dataset | Academic performance indicators |
+| Student Stress Dataset | Psychological and lifestyle indicators |
+
+---
+
+### 3️⃣ Data Engineering Pipeline
+
+The project implements a **modular ETL pipeline** that performs:
+
+- Data ingestion
+- Data cleaning
+- Schema alignment
+- Data validation
+- Warehouse loading
+
+---
+
+# 🛠 Technology Stack
+
+| Layer | Technology |
+|------|------|
+| Data Processing | Python |
+| Data Analysis | Pandas |
+| ETL Pipeline | Custom Python Scripts |
+| Database | PostgreSQL |
+| SQL Analytics | PostgreSQL Views |
+| Visualization | Tableau |
+| Version Control | Git + GitHub |
+| CI/CD | GitHub Actions |
+| Environment Management | Python venv |
+
+---
+
+# 📁 Repository Structure
+
+The architecture follows a **modern analytics pipeline structure**, similar to those used in real-world data teams.
+
+---
+
+# 🧠 Core Design Principles
+
+### 1️⃣ Behavioral Analytics
+
+The platform focuses on **student behavior rather than only final grades**, allowing deeper understanding of:
+
+- learning habits
+- productivity fluctuations
+- stress impact
+- digital tool usage
+
+---
+
+### 2️⃣ Multi-Dataset Integration
+
+The platform integrates multiple datasets:
+
+| Dataset | Purpose |
+|------|------|
+| Student Study Survey | Weekly study behavior |
+| Student Performance Dataset | Academic performance indicators |
+| Student Stress Dataset | Psychological and lifestyle indicators |
+
+---
+
+### 3️⃣ Data Engineering Pipeline
+
+The project implements a **modular ETL pipeline** that performs:
+
+- Data ingestion
+- Data cleaning
+- Schema alignment
+- Data validation
+- Warehouse loading
+
+---
+
+# 🛠 Technology Stack
+
+| Layer | Technology |
+|------|------|
+| Data Processing | Python |
+| Data Analysis | Pandas |
+| ETL Pipeline | Custom Python Scripts |
+| Database | PostgreSQL |
+| SQL Analytics | PostgreSQL Views |
+| Visualization | Tableau |
+| Version Control | Git + GitHub |
+| CI/CD | GitHub Actions |
+| Environment Management | Python venv |
+
+---
+
+# 📁 Repository Structure
+study_tools_survey
+│
+├── backend
+│
+│ ├── etl
+│ │ baseline_etl.py
+│ │ weekly_etl.py
+│ │ student_performance_loader.py
+│ │ stress_loader.py
+│ │ utils.py
+│ │
+│ ├── pipeline
+│ │ orchestrator.py
+│ │
+│ ├── sql
+│ │ schema.sql
+│ │ analytics_views.sql
+│ │ refresh_views.sql
+│ │
+│ ├── run_pipeline.py
+│ └── requirements.txt
+│
+├── data
+│ ├── layer2_student_performance
+│ │ student-mat.csv
+│ │ student-por.csv
+│ │
+│ └── layer3_stress_dataset
+│ stress_students.csv
+│
+├── dashboards
+│ study_behavior_dashboard.twb
+│
+├── .github
+│ workflows
+│ pipeline.yml
+│
+└── README.md
