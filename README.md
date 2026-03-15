@@ -281,3 +281,15 @@ The analytics layer generates behavioral insights through SQL views.
 engagement_index =
 productivity_level * 0.7 +
 (10 - stress_level) * 0.3
+---
+
+### Academic Risk Classification
+CASE
+WHEN stress_level >= 4 AND total_hours_this_week < 15
+THEN 'HIGH_RISK'
+
+WHEN stress_level >= 3
+THEN 'MEDIUM_RISK'
+
+ELSE 'LOW_RISK'
+END
