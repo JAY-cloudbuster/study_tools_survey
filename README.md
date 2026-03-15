@@ -33,3 +33,12 @@ The final system enables **behavioral analytics and educational insights** that 
 ---
 
 # 🧱 High-Level System Architecture
+CSV / Survey Datasets
+↓
+Python ETL Pipelines
+↓
+PostgreSQL Data Warehouse
+↓
+SQL Analytical Views
+↓
+Tableau Dashboard
