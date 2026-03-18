@@ -1,365 +1,444 @@
-# This is written so that:
+# 📊 Study Habits, Digital Tools & Academic Performance
+## End-to-End Student Behavior Analytics Platform
 
-- **A new person with zero context** can reproduce everything
-- **Every command is explicit**
-- **Every decision is justified**
-- **No tribal knowledge is required**
+This project implements a **complete data engineering and analytics pipeline** designed to analyze how **study habits, stress levels, and digital learning tools influence student productivity and academic outcomes.**
 
-You can copy–paste this **as-is**.
+The system integrates multiple datasets, performs automated ETL processing, stores structured data in a **PostgreSQL data warehouse**, and produces analytical insights through **Tableau dashboards**.
 
----
-
-# 📊 Study Habits, Tools & Academic Performance
-## End-to-End Business Analytics Pipeline (India-wide Survey)
-
-## 📌 Project Overview
-
-This project builds a **real-time, dynamic analytics pipeline** to study how **study habits and digital tool usage** impact academic performance among **university students in India**.
-
-**Key characteristics:**
-
-- Anonymous, cohort-based analytics (no personal identifiers)
-- Google Forms → Google Sheets → PostgreSQL → Analytics
-- Attention-check–validated data quality
-- Weekly time-series tracking
-- Designed for Power BI live dashboards
+The project demonstrates a **production-style analytics architecture** combining **data engineering, SQL analytics, and business intelligence visualization.**
 
 ---
 
-## 🧱 High-Level Architecture
-```java
-Google Forms
-   ↓
-Google Sheets (live)
-   ↓
-Python ETL (Attention-validated)
-   ↓
-PostgreSQL (Structured Storage)
-   ↓
-Analytics / Power BI (Next phase)
-```
+# 🎯 Project Objectives
+
+The primary goal of this project is to build a **data-driven analytics platform** capable of identifying behavioral patterns in student learning.
+
+The platform analyzes relationships between:
+
+- Study hours
+- Study consistency
+- Stress levels
+- Digital tool usage
+- AI tool adoption
+- Academic performance indicators
+
+The final system enables **behavioral analytics and educational insights** that help identify:
+
+- High engagement students
+- Students at academic risk
+- Impact of digital tools on productivity
+- Stress-productivity relationships
+- Study behavior trends over time
 
 ---
 
-## 📁 Repository Structure
-```pgsql
-study_tools_survey/
-│
-├── backend/
-│   ├── etl/
-│   │   ├── baseline_etl.py
-│   │   ├── weekly_etl.py
-│   │   └── utils.py
-│   │
-│   ├── sql/
-│   │   └── schema.sql
-│   │
-│   ├── .env              # NOT committed
-│   ├── requirements.txt
-│   └── venv/              # Virtual environment (ignored by Git)
-│
-├── .gitignore
-└── README.md              # This file
-```
+# 🧱 High-Level System Architecture
+CSV / Survey Datasets
+↓
+Python ETL Pipelines
+↓
+PostgreSQL Data Warehouse
+↓
+SQL Analytical Views
+↓
+Tableau Dashboard
+
+The architecture follows a **modern analytics pipeline structure**, similar to those used in real-world data teams.
 
 ---
 
-## 🧠 Conceptual Design
+# 🧠 Core Design Principles
 
-### 1️⃣ Two Survey Types
+### 1️⃣ Behavioral Analytics
 
-#### **Baseline Survey (One-time)**
+The platform focuses on **student behavior rather than only final grades**, allowing deeper understanding of:
 
-Captures:
-
-- Academic context (state, university type, course)
-- CGPA band
-- Baseline study habits
-- Regular digital tools used
-
-Each response defines a **cohort**.
-
-#### **Weekly Survey (Repeated)**
-
-Captures:
-
-- Weekly study hours
-- Consistency, revision, stress
-- AI tool usage
-- Productivity
-- Constraints
-- Week number
-
-This forms the **time series**.
+- learning habits
+- productivity fluctuations
+- stress impact
+- digital tool usage
 
 ---
 
-### 2️⃣ No Personal Identifiers
+### 2️⃣ Multi-Dataset Integration
 
-- No name, email, student ID collected
-- Cohorts are derived using hashed academic attributes
-- Privacy-safe analytics by design
+The platform integrates multiple datasets:
+
+| Dataset | Purpose |
+|------|------|
+| Student Study Survey | Weekly study behavior |
+| Student Performance Dataset | Academic performance indicators |
+| Student Stress Dataset | Psychological and lifestyle indicators |
 
 ---
 
-## 🛠️ Technology Stack
+### 3️⃣ Data Engineering Pipeline
+
+The project implements a **modular ETL pipeline** that performs:
+
+- Data ingestion
+- Data cleaning
+- Schema alignment
+- Data validation
+- Warehouse loading
+
+---
+
+# 🛠 Technology Stack
 
 | Layer | Technology |
-|-------|------------|
-| Data Collection | Google Forms |
-| Storage | Google Sheets |
-| ETL | Python 3.11 |
+|------|------|
+| Data Processing | Python |
+| Data Analysis | Pandas |
+| ETL Pipeline | Custom Python Scripts |
 | Database | PostgreSQL |
-| Analytics (next) | Power BI |
+| SQL Analytics | PostgreSQL Views |
+| Visualization | Tableau |
 | Version Control | Git + GitHub |
+| CI/CD | GitHub Actions |
+| Environment Management | Python venv |
 
 ---
 
-## ⚙️ Setup Instructions (From Scratch)
+# 📁 Repository Structure
 
-### Step 1️⃣ Clone the Repository
-```bash
-git clone https://github.com/<your-username>/study_tools_survey.git
-cd study_tools_survey
-```
+The architecture follows a **modern analytics pipeline structure**, similar to those used in real-world data teams.
 
 ---
 
-### Step 2️⃣ Create Python Virtual Environment
-```bash
-cd backend
-python -m venv venv
-```
+# 🧠 Core Design Principles
 
-**Activate it:**
+### 1️⃣ Behavioral Analytics
 
-**Windows (PowerShell):**
-```powershell
-venv\Scripts\activate
-```
+The platform focuses on **student behavior rather than only final grades**, allowing deeper understanding of:
 
-You should see:
-```scss
-(venv)
-```
+- learning habits
+- productivity fluctuations
+- stress impact
+- digital tool usage
 
 ---
 
-### Step 3️⃣ Install Dependencies
-```bash
-pip install pandas psycopg2-binary python-dotenv
-pip freeze > requirements.txt
-```
+### 2️⃣ Multi-Dataset Integration
+
+The platform integrates multiple datasets:
+
+| Dataset | Purpose |
+|------|------|
+| Student Study Survey | Weekly study behavior |
+| Student Performance Dataset | Academic performance indicators |
+| Student Stress Dataset | Psychological and lifestyle indicators |
 
 ---
 
-## 🗄️ Database Setup (PostgreSQL)
+### 3️⃣ Data Engineering Pipeline
 
-### Step 4️⃣ Create Database
+The project implements a **modular ETL pipeline** that performs:
 
-Using **pgAdmin** or **psql**:
-```sql
-CREATE DATABASE study_analytics;
-```
-
----
-
-### Step 5️⃣ Create Tables
-
-Open **pgAdmin → Query Tool**, paste and run:
-```sql
-CREATE TABLE baseline_cohorts (
-    cohort_key VARCHAR(128) PRIMARY KEY,
-    state VARCHAR(100),
-    university_type VARCHAR(100),
-    course_program VARCHAR(150),
-    year_of_study VARCHAR(50),
-    cgpa_band VARCHAR(50),
-    baseline_avg_daily_study_hours VARCHAR(50),
-    digital_tools_raw TEXT,
-    tool_count INT
-);
-
-CREATE TABLE weekly_observations (
-    observation_id SERIAL PRIMARY KEY,
-    cohort_key VARCHAR(128) REFERENCES baseline_cohorts(cohort_key),
-    week_number VARCHAR(50),
-    total_hours_this_week INT,
-    avg_daily_study_hours VARCHAR(50),
-    study_consistency VARCHAR(100),
-    revision_frequency VARCHAR(100),
-    group_study_participation VARCHAR(100),
-    ai_tools_usage VARCHAR(150),
-    approx_ai_usage_hours VARCHAR(50),
-    digital_tool_usage_frequency VARCHAR(100),
-    academic_constraints_raw TEXT,
-    productivity_level INT,
-    stress_level INT,
-    had_assessment BOOLEAN,
-    assessment_score INT,
-    comparison_to_last_week VARCHAR(150),
-    weekly_tools_raw TEXT
-);
-```
+- Data ingestion
+- Data cleaning
+- Schema alignment
+- Data validation
+- Warehouse loading
 
 ---
 
-## 🔐 Environment Configuration
+# 🛠 Technology Stack
 
-### Step 6️⃣ Create .env file
-
-Inside `backend/` create a file named `.env`:
-```
-DB_HOST=localhost
-DB_NAME=study_analytics
-DB_USER=postgres
-DB_PASSWORD=your_password_here
-```
-
-⚠️ **This file must never be committed.**
-
----
-
-## 🔄 ETL Pipeline (Core Logic)
-
-### **Attention Check Enforcement**
-
-To ensure data quality:
-
-- **Baseline survey** accepts only **"2–4 hours"**
-- **Weekly survey** accepts only **"ChatGPT / AI tools"**
-- All other responses are discarded at ingestion.
+| Layer | Technology |
+|------|------|
+| Data Processing | Python |
+| Data Analysis | Pandas |
+| ETL Pipeline | Custom Python Scripts |
+| Database | PostgreSQL |
+| SQL Analytics | PostgreSQL Views |
+| Visualization | Tableau |
+| Version Control | Git + GitHub |
+| CI/CD | GitHub Actions |
+| Environment Management | Python venv |
 
 ---
 
-### **Cohort Key Generation**
+# 📁 Repository Structure
+study_tools_survey
+│
+├── backend
+│
+│ ├── etl
+│ │ baseline_etl.py
+│ │ weekly_etl.py
+│ │ student_performance_loader.py
+│ │ stress_loader.py
+│ │ utils.py
+│ │
+│ ├── pipeline
+│ │ orchestrator.py
+│ │
+│ ├── sql
+│ │ schema.sql
+│ │ analytics_views.sql
+│ │ refresh_views.sql
+│ │
+│ ├── run_pipeline.py
+│ └── requirements.txt
+│
+├── data
+│ ├── layer2_student_performance
+│ │ student-mat.csv
+│ │ student-por.csv
+│ │
+│ └── layer3_stress_dataset
+│ stress_students.csv
+│
+├── dashboards
+│ study_behavior_dashboard.twb
+│
+├── .github
+│ workflows
+│ pipeline.yml
+│
+└── README.md
 
-A cohort is uniquely identified using:
+---
 
-- State
+# 🗄 Data Warehouse Design
+
+The PostgreSQL warehouse contains multiple relational tables designed for behavioral analytics.
+
+### Main Tables
+
+| Table | Description |
+|------|------|
+| baseline_cohorts | Student baseline academic context |
+| weekly_observations | Weekly behavioral survey responses |
+| student_performance | External academic performance dataset |
+| student_stress_context | Student lifestyle and stress dataset |
+| cohort_weekly_metrics | Derived analytics table |
+
+---
+
+### Example Schema
+baseline_cohorts
+│
+└── cohort_key
+│
+▼
+weekly_observations
+
+student_performance
+student_stress_context
+
+The schema allows:
+
+- cohort-level analysis
+- weekly behavioral tracking
+- multi-dataset correlation
+
+---
+
+# 🔄 ETL Pipeline
+
+The ETL pipeline is implemented in **Python** and consists of several modular scripts.
+
+### Baseline ETL
+Processes baseline survey responses and loads them into:
+### Weekly ETL
+Processes weekly behavioral survey responses and loads them into:
+
+---
+
+### Student Performance Dataset Loader
+
+Loads external academic performance dataset.
+
+---
+
+### Student Stress Dataset Loader
+
+Loads psychological and lifestyle dataset.
+
+---
+
+# ⚙ Pipeline Orchestration
+
+To simplify execution, the entire ETL workflow can be executed using a single command.
+
+The orchestrator performs:
+
+1️⃣ Baseline ETL  
+2️⃣ Weekly ETL  
+3️⃣ Student performance dataset load  
+4️⃣ Stress dataset load  
+5️⃣ SQL analytics refresh  
+
+---
+
+# 📊 Analytical SQL Layer
+
+The analytics layer generates behavioral insights through SQL views.
+
+### Engagement Index
+engagement_index =
+productivity_level * 0.7 +
+(10 - stress_level) * 0.3
+---
+
+### Academic Risk Classification
+CASE
+WHEN stress_level >= 4 AND total_hours_this_week < 15
+THEN 'HIGH_RISK'
+
+WHEN stress_level >= 3
+THEN 'MEDIUM_RISK'
+
+ELSE 'LOW_RISK'
+END
+
+---
+
+### Analytics Views
+
+| View | Purpose |
+|------|------|
+| engagement_metrics | Student engagement score |
+| academic_risk_analysis | Risk classification |
+| tool_adoption_analysis | Digital tool usage patterns |
+| stress_behavior_analysis | Stress behavior relationships |
+
+---
+
+# 📊 Tableau Dashboard
+
+The final analytics results are visualized using **Tableau**.
+
+The dashboard includes:
+
+### KPI Cards
+
+- Total Students
+- Average Study Hours
+- Average Productivity
+- Average Stress
+
+---
+
+### Visualizations
+
+- Study Hours vs Productivity
+- Stress vs Productivity
+- Academic Risk Distribution
+- Digital Tool Adoption by Program
+- Weekly Engagement Trends
+
+---
+
+### Interactive Filters
+
+Users can filter results by:
+
+- Course program
 - University type
-- Course
-- CGPA band
-
-These are:
-
-1. Concatenated
-2. SHA-256 hashed
-3. Stored as `cohort_key`
-
-This ensures:
-
-- No personal data
-- Stable grouping
-- Longitudinal tracking
+- State
+- Risk category
 
 ---
 
-## ▶️ Running the Pipeline
+# ⚡ Automation
 
-### Step 7️⃣ Run Baseline ETL
-```bash
-cd backend
-venv\Scripts\activate
-python etl/baseline_etl.py
-```
+The project supports automated execution of the ETL pipeline.
 
-**Expected output:**
-```
+Automation features include:
+
+- Pipeline orchestration script
+- Automated SQL view refresh
+- Scheduled pipeline execution
+- Logging support
+
+---
+
+# 🔁 CI/CD Pipeline
+
+The repository includes a **GitHub Actions workflow** that validates the pipeline.
+
+The CI pipeline performs:
+
+1️⃣ Install dependencies  
+2️⃣ Run ETL scripts  
+3️⃣ Validate database connections  
+4️⃣ Execute analytics SQL  
+
+This ensures the pipeline remains stable during development.
+
+---
+
+# 🧪 Example Pipeline Output
 Baseline ETL completed.
-Accepted rows: >0
-Rejected rows: >0
-```
+Accepted rows: 89
+Rejected rows: 13
 
----
-
-### Step 8️⃣ Run Weekly ETL
-```bash
-python etl/weekly_etl.py
-```
-
-**Expected output:**
-```
 Weekly ETL completed.
-Accepted rows: >0
-Rejected rows: >0
-```
+Accepted rows: 241
+Rejected rows: 19
+
+Loading student performance datasets...
+Inserted 1044 rows.
+
+Loading stress dataset...
+Inserted 2000 rows.
+
+REFRESH MATERIALIZED VIEW
 
 ---
 
-## ✅ Verification Checklist
+# 🚀 Future Improvements
 
-### **Database Row Counts**
+Potential future improvements include:
 
-In **pgAdmin**:
-```sql
-SELECT COUNT(*) FROM baseline_cohorts;
-SELECT COUNT(*) FROM weekly_observations;
-```
-
-Both must be **> 0**.
-
----
-
-### **Referential Integrity Check**
-```sql
-SELECT COUNT(*)
-FROM weekly_observations w
-LEFT JOIN baseline_cohorts b
-ON w.cohort_key = b.cohort_key
-WHERE b.cohort_key IS NULL;
-```
-
-**Expected:**
-```
-0
-```
+- Real-time streaming ingestion
+- Airflow pipeline orchestration
+- Predictive modeling for academic risk
+- Machine learning models for performance prediction
+- API layer using FastAPI
+- Cloud deployment
 
 ---
 
-## 🧪 What Has Been Fully Implemented
+# 🎓 Academic Value
 
-✔ Google Forms ingestion  
-✔ Live Google Sheets data source  
-✔ Attention-validated ETL  
-✔ PostgreSQL schema  
-✔ Cohort-based anonymization  
-✔ Weekly time-series storage  
-✔ Stable backend pipeline  
+This project demonstrates skills in:
 
----
-
-## 🚀 Next Planned Steps (Not Yet Implemented)
-
-- Derived metrics (engagement, risk, momentum)
-- Power BI live dashboard
-- ETL automation (scheduler)
-- Documentation for analytics interpretation
+- Data Engineering
+- SQL Analytics
+- Data Warehousing
+- ETL Pipeline Design
+- Business Intelligence
+- Behavioral Data Analysis
 
 ---
 
-## 🧠 Faculty-Ready Summary Statement
+# 🧠 Project Summary
 
-> **"This project implements an end-to-end, attention-validated analytics pipeline that ingests real-time Google Form survey data, enforces data quality at ingestion, and structures cohort-based weekly time-series data for scalable business analytics."**
+This system implements a **full analytics pipeline that transforms raw behavioral datasets into actionable educational insights.**
 
----
-
-## 🧾 Troubleshooting Notes
-
-- **Accepted rows = 0** → attention check mismatch
-- **KeyError** → column spacing issue (handled in code)
-- **DB connection error** → `.env` misconfigured
-- **Timestamp issues** → timestamps intentionally removed
+The platform demonstrates how **data engineering pipelines and business intelligence tools can be applied to analyze student learning behavior and productivity trends.**
 
 ---
 
-## 🏁 Final Status
+# 👨‍💻 Author
 
-**Backend pipeline is stable, verified, and production-ready.**
+Jayesh Kalla Rao  
+Computer Science and Engineering  
+Amrita Vishwa Vidyapeetham
 
-This repository is now safe for:
+---
 
-- Demonstration
-- Extension
-- Team collaboration
-- Analytics development
+# ⭐ Final Status
+
+✔ Data Engineering Pipeline Complete  
+✔ PostgreSQL Warehouse Implemented  
+✔ Analytical SQL Layer Complete  
+✔ Tableau Dashboard Functional  
+✔ Automation Implemented  
+✔ CI/CD Pipeline Integrated  
+
+**Project ready for demonstration and portfolio use.**
