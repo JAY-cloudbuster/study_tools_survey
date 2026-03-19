@@ -442,3 +442,18 @@ Amrita Vishwa Vidyapeetham
 ✔ CI/CD Pipeline Integrated  
 
 **Project ready for demonstration and portfolio use.**
+
+
+---
+
+## Project Status
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+## Team
+- JAY-cloudbuster (Lead Developer)
+- Kanishthika11 (Data Engineer)  
+- Mayukasri06 (Documentation & Data)
+- Srijak1202 (Testing & QA)
+- suhas107 (DevOps & CI/CD)
