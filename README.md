@@ -445,6 +445,13 @@ Amrita Vishwa Vidyapeetham
 
 
 ---
+## 🔗 Deployed Dashboard link
+
+👉 [View on Tableau Public](https://public.tableau.com/app/profile/kanishthika.k/viz/ba_project_updated/Dashboard1?publish=yes)
+
+---
+
+
 
 ## Project Status
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
