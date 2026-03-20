@@ -1,4 +1,4 @@
-# 📊 Study Habits, Digital Tools & Academic Performance
+# Study Habits, Digital Tools & Academic Performance
 ## End-to-End Student Behavior Analytics Platform
 
 This project implements a **complete data engineering and analytics pipeline** designed to analyze how **study habits, stress levels, and digital learning tools influence student productivity and academic outcomes.**
@@ -9,7 +9,7 @@ The project demonstrates a **production-style analytics architecture** combining
 
 ---
 
-# 🎯 Project Objectives
+# Project Objectives
 
 The primary goal of this project is to build a **data-driven analytics platform** capable of identifying behavioral patterns in student learning.
 
@@ -32,7 +32,7 @@ The final system enables **behavioral analytics and educational insights** that 
 
 ---
 
-# 🧱 High-Level System Architecture
+# High-Level System Architecture
 CSV / Survey Datasets
 ↓
 Python ETL Pipelines
@@ -47,9 +47,9 @@ The architecture follows a **modern analytics pipeline structure**, similar to t
 
 ---
 
-# 🧠 Core Design Principles
+# Core Design Principles
 
-### 1️⃣ Behavioral Analytics
+### Behavioral Analytics
 
 The platform focuses on **student behavior rather than only final grades**, allowing deeper understanding of:
 
@@ -60,7 +60,7 @@ The platform focuses on **student behavior rather than only final grades**, allo
 
 ---
 
-### 2️⃣ Multi-Dataset Integration
+### Multi-Dataset Integration
 
 The platform integrates multiple datasets:
 
@@ -72,7 +72,7 @@ The platform integrates multiple datasets:
 
 ---
 
-### 3️⃣ Data Engineering Pipeline
+### Data Engineering Pipeline
 
 The project implements a **modular ETL pipeline** that performs:
 
@@ -84,7 +84,7 @@ The project implements a **modular ETL pipeline** that performs:
 
 ---
 
-# 🛠 Technology Stack
+# Technology Stack
 
 | Layer | Technology |
 |------|------|
@@ -100,15 +100,15 @@ The project implements a **modular ETL pipeline** that performs:
 
 ---
 
-# 📁 Repository Structure
+# Repository Structure
 
 The architecture follows a **modern analytics pipeline structure**, similar to those used in real-world data teams.
 
 ---
 
-# 🧠 Core Design Principles
+# Core Design Principles
 
-### 1️⃣ Behavioral Analytics
+###  Behavioral Analytics
 
 The platform focuses on **student behavior rather than only final grades**, allowing deeper understanding of:
 
@@ -119,7 +119,7 @@ The platform focuses on **student behavior rather than only final grades**, allo
 
 ---
 
-### 2️⃣ Multi-Dataset Integration
+###  Multi-Dataset Integration
 
 The platform integrates multiple datasets:
 
@@ -131,7 +131,7 @@ The platform integrates multiple datasets:
 
 ---
 
-### 3️⃣ Data Engineering Pipeline
+###  Data Engineering Pipeline
 
 The project implements a **modular ETL pipeline** that performs:
 
@@ -143,7 +143,7 @@ The project implements a **modular ETL pipeline** that performs:
 
 ---
 
-# 🛠 Technology Stack
+#  Technology Stack
 
 | Layer | Technology |
 |------|------|
@@ -159,7 +159,7 @@ The project implements a **modular ETL pipeline** that performs:
 
 ---
 
-# 📁 Repository Structure
+#  Repository Structure
 study_tools_survey
 │
 ├── backend
@@ -201,7 +201,7 @@ study_tools_survey
 
 ---
 
-# 🗄 Data Warehouse Design
+#  Data Warehouse Design
 
 The PostgreSQL warehouse contains multiple relational tables designed for behavioral analytics.
 
@@ -236,7 +236,7 @@ The schema allows:
 
 ---
 
-# 🔄 ETL Pipeline
+#  ETL Pipeline
 
 The ETL pipeline is implemented in **Python** and consists of several modular scripts.
 
@@ -265,15 +265,15 @@ To simplify execution, the entire ETL workflow can be executed using a single co
 
 The orchestrator performs:
 
-1️⃣ Baseline ETL  
-2️⃣ Weekly ETL  
-3️⃣ Student performance dataset load  
-4️⃣ Stress dataset load  
-5️⃣ SQL analytics refresh  
+ Baseline ETL  
+ Weekly ETL  
+ Student performance dataset load  
+ Stress dataset load  
+ SQL analytics refresh  
 
 ---
 
-# 📊 Analytical SQL Layer
+#  Analytical SQL Layer
 
 The analytics layer generates behavioral insights through SQL views.
 
@@ -307,7 +307,7 @@ END
 
 ---
 
-# 📊 Tableau Dashboard
+# Tableau Dashboard
 
 The final analytics results are visualized using **Tableau**.
 
@@ -343,7 +343,7 @@ Users can filter results by:
 
 ---
 
-# ⚡ Automation
+# Automation
 
 The project supports automated execution of the ETL pipeline.
 
@@ -356,22 +356,22 @@ Automation features include:
 
 ---
 
-# 🔁 CI/CD Pipeline
+# CI/CD Pipeline
 
 The repository includes a **GitHub Actions workflow** that validates the pipeline.
 
 The CI pipeline performs:
 
-1️⃣ Install dependencies  
-2️⃣ Run ETL scripts  
-3️⃣ Validate database connections  
-4️⃣ Execute analytics SQL  
+ Install dependencies  
+ Run ETL scripts  
+ Validate database connections  
+ Execute analytics SQL  
 
 This ensures the pipeline remains stable during development.
 
 ---
 
-# 🧪 Example Pipeline Output
+#  Example Pipeline Output
 Baseline ETL completed.
 Accepted rows: 89
 Rejected rows: 13
@@ -390,7 +390,7 @@ REFRESH MATERIALIZED VIEW
 
 ---
 
-# 🚀 Future Improvements
+# Future Improvements
 
 Potential future improvements include:
 
@@ -403,7 +403,7 @@ Potential future improvements include:
 
 ---
 
-# 🎓 Academic Value
+# Academic Value
 
 This project demonstrates skills in:
 
@@ -416,7 +416,7 @@ This project demonstrates skills in:
 
 ---
 
-# 🧠 Project Summary
+# Project Summary
 
 This system implements a **full analytics pipeline that transforms raw behavioral datasets into actionable educational insights.**
 
@@ -424,15 +424,14 @@ The platform demonstrates how **data engineering pipelines and business intellig
 
 ---
 
-# 👨‍💻 Author
+# Author
 
 Jayesh Kalla Rao  
 Computer Science and Engineering  
 Amrita Vishwa Vidyapeetham
 
 ---
-
-# ⭐ Final Status
+# Final Status
 
 ✔ Data Engineering Pipeline Complete  
 ✔ PostgreSQL Warehouse Implemented  
