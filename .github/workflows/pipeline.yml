@@ -1,11 +1,24 @@
 name: Data Pipeline CI
 
 on:
+  # Trigger on code changes
   push:
     branches: [ main ]
 
   pull_request:
     branches: [ main ]
+
+  # Scheduled trigger — runs daily to pick up new survey entries
+  schedule:
+    - cron: '0 0 * * *'   # Runs every day at midnight UTC (5:30 AM IST)
+
+  # Manual trigger — run pipeline on-demand from GitHub Actions UI
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual pipeline run'
+        required: false
+        default: 'New survey data available'
 
 jobs:
 
