@@ -15,7 +15,7 @@ The primary goal of this project is to build a **data-driven analytics platform*
 
 The platform analyzes relationships between:
 
-- Study hours
+- Study hours ( related toi how many hours)
 - Study consistency
 - Stress levels
 - Digital tool usage
