@@ -453,7 +453,7 @@ Amrita Vishwa Vidyapeetham
 
 
 ## Project Status
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Build Status](https://img.shields.io/badge/build-completed-brightgreen)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
